@@ -1,7 +1,7 @@
 import React from 'react';
-import { ActivityIndicator,Alert,TextInput,StyleSheet,ListView, View, Text } from 'react-native';
+import { ImageBackground,ActivityIndicator,Alert,TextInput,StyleSheet,ListView, View, Text } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import Perfil from './app/components/Profile';
+import Pets from './app/components/Pets';
 
 class SearchScreen extends React.Component {
   static navigationOptions = {
@@ -16,9 +16,9 @@ constructor(props){
   this.consulta = [];//Arreglo Global
 }
 
-Action_Click(id_propietario){
-  this.props.navigation.navigate('Second',{
-      id_propietario:id_propietario
+Action_Click(id_propietario,nombre_propietario){
+  this.props.navigation.navigate('PetsScreen',{
+      id_propietario:id_propietario,nombre_propietario:nombre_propietario
   })
   Alert.alert(id_propietario);
 }
@@ -56,11 +56,11 @@ render(){
     )
   }
   return(
-    
+    <ImageBackground source={require('./img/pet1.jpg')} style={styles.imageContainer}>
     <View style={styles.ContainerDataUsers}>
       <Text style={styles.tittle}>Busqueda de Propietario</Text>
       <TextInput style={styles.textInput} 
-          placeholder='Cédula' 
+          placeholder='Ingrese el Nombre del Propietario' 
           onChangeText={(Input_propietario) => this.SearchProfile(Input_propietario)} 
           value={this.state.Input_propietario}
           underlineColorAndroid='transparent'/>
@@ -69,13 +69,15 @@ render(){
         renderSeparator={this.ListViewItemSeparator}
         renderRow={(rowData)=>
           <Text style={styles.rowViewContainer} onPress={this.Action_Click.bind(this,
-              rowData.id_propietario
+              rowData.id_propietario,
+              rowData.nombre_propietario
             )}>
             {rowData.nombre_propietario}
           </Text>
         }
       />
     </View>
+    </ImageBackground>
   )
 }
 
@@ -104,12 +106,12 @@ const RootStack = createStackNavigator(
   {
     
     SearchScreen:SearchScreen,
-    ProfileScreen:{
-      screen: Perfil,
+    PetsScreen:{
+      screen: Pets,
       navigationOptions: () => ({
-        //title: `A`,
-        header: null,
-        headerBackTitle: null
+        title: 'Mascotas',
+        //header: null,
+        //headerBackTitle: null
       }),
     }
     
@@ -121,6 +123,13 @@ const App = createAppContainer(RootStack);
 export default App;
 
 const styles = StyleSheet.create({
+  imageContainer: {
+    flex: 1,
+    backgroundColor: '#F5FCFF',
+    alignItems: 'center',
+    width: '100%', height: '100%'
+    //justifyContent: 'center',
+  },
   ContainerDataUsers:{
       flex:1,
       paddingTop:20,
